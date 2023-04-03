@@ -12,6 +12,6 @@ import imgprocesor
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     obraz = imgprocesor.Procesor('obraz', 'images/obraz.jpg')
-    obraz.getDim()
+    obraz.getContourMatrix(150, 200, 100, 300)
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
