@@ -1,8 +1,8 @@
 from pathlib import Path
 import cv2
-import numpy as np
+import numpy
+import  math
 from matplotlib import pyplot as plt
-import array as arr
 
 class Procesor:
     def __init__(self, name, path):
@@ -21,15 +21,28 @@ class Procesor:
         print("Height = {},  Width = {}".format(h, w))
     def getContourMatrix(self, matrixHeight, matrixWidth, lowThreshold, highThreshold):
 
-        #scaling image according to matrix dimmensions
+        #scaling image according to matrix dimmensions, rounding scale up to avoid to big dimensions of img
         h, w = self.image.shape[:2]
         if h/matrixHeight > w/matrixWidth:
-            scale = int(h/matrixHeight)
+            scale = math.ceil(h/matrixHeight)
         else:
-            scale = int(w/matrixWidth)
+            scale = math.ceil(w/matrixWidth)
         #using Canny alghoritm to modify scaled image
         _resized_image = cv2.resize(self.image, (int(w/scale), int(h/scale)), interpolation = cv2.INTER_CUBIC)
         self.image_contour = cv2.Canny(_resized_image, int(lowThreshold), int(highThreshold))
+        h1, w1 = self.image_contour.shape[:2]
+
+        self.contourMatrix = numpy.empty([matrixHeight, matrixWidth], dtype=int)
+        for x in range(h1):
+            for y in range(w1):
+                self.contourMatrix[x, y] = int(self.image_contour[x,y])
+
+        slicedMatrix = self.contourMatrix[:50, :50]
+        print(self.image.shape)
+        print(scale)
+        print(self.image_contour.shape)
+        print(slicedMatrix)
+        numpy.savetxt("data.csv", self.contourMatrix, delimiter=",")
 
         cv2.imshow('kontur', self.image_contour)
 
