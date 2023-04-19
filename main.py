@@ -1,5 +1,6 @@
 import imgprocesor
 import cv2
+import numpy
 
 # Stworzyc:
 # a) kod przetwarzajacy obraz i zapisujacy krawedzie w postaci matryc
@@ -25,4 +26,6 @@ if __name__ == '__main__':
 
     # closing all open windows
     cv2.destroyAllWindows()
+    matryca = obraz.get_contour_matrix()
+    print(matryca)
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/

@@ -48,10 +48,11 @@ class Procesor:
                                     interpolation = cv2.INTER_CUBIC)
         # using Canny alghoritm to modify scaled image
         self.image_contour = cv2.Canny(_resized_image, int(low_threshold), int(high_threshold))
+        print(type(self.image_contour))
         return self.image_contour
 
     def get_contour_matrix(self):
-        if self.image_contour == None:
+        if not type(self.image_contour) == numpy.ndarray:
             raise ValueError("Obraz musi zostać przetworzony przy pomocy funkcji set_edge_detection")
         contour_heigh, contour_width  = self.image_contour.shape[:2]
         #making numpy array on base of image_contour
