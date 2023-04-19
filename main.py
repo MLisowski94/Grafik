@@ -1,4 +1,5 @@
 import imgprocesor
+import cv2
 
 # Stworzyc:
 # a) kod przetwarzajacy obraz i zapisujacy krawedzie w postaci matryc
@@ -12,6 +13,16 @@ import imgprocesor
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     obraz = imgprocesor.Procesor('obraz', 'images/obraz.jpg')
-    obraz.getContourMatrix(150, 200, 100, 300)
+    wymiary = obraz.set_scale(16)
+    print("Oryginalny wymiar to %(heigh_original)d, %(width_original)d, skala to %(scale)d "
+          "nowy wymiar to %(heigh_scaled)d, %(width_scaled)d"%wymiary)
+    kontur = obraz.set_edge_detection(100, 100)
+    cv2.imshow('kontur', kontur)
 
+    # waits for user to press any key
+    # (this is necessary to avoid Python kernel form crashing)
+    cv2.waitKey(0)
+
+    # closing all open windows
+    cv2.destroyAllWindows()
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
