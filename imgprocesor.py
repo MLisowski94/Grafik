@@ -20,22 +20,26 @@ class Procesor:
 
     def set_scale(self, scale):
         heigh, width = self.image.shape[:2]
-        heigh_scaled = math.ceil(heigh / scale)
-        width_scaled = math.ceil(width / scale)
+        self.heigh_scaled = math.ceil(heigh / scale)
+        self.width_scaled = math.ceil(width / scale)
         #Checking for validity of scale
         if not type(scale) == int:
             raise TypeError("Wartosc zmiennej scale musi być typu iny")
-        if heigh_scaled < 1 or width_scaled < 1:
+        if self.heigh_scaled < 1 or self.width_scaled < 1:
             raise ValueError("Wartosc zmiennej skala ma zbyt duza wartosc, "
                              "po przeksalowaniu obraz staje sie mniejszy niż 1px")
-        self.scale = scale;
+        self.scale = scale
+
+    def get_dimensions(self):
+        heigh, width = self.image.shape[:2]
         dimensions = {
-            "scale": scale,
+            "scale": self.scale,
             "heigh_original": heigh,
             "width_original": width,
-            "heigh_scaled": heigh_scaled,
-            "width_scaled": width_scaled
+            "heigh_scaled": self.heigh_scaled,
+            "width_scaled": self.width_scaled
         }
+
         return dimensions
 
     def set_edge_detection(self, low_threshold, high_threshold):
@@ -48,18 +52,28 @@ class Procesor:
                                     interpolation = cv2.INTER_CUBIC)
         # using Canny alghoritm to modify scaled image
         self.image_contour = cv2.Canny(_resized_image, int(low_threshold), int(high_threshold))
-        print(type(self.image_contour))
         return self.image_contour
 
-    def get_contour_matrix(self):
+    def get_contour_matrix(self, znak):
+        if not type(znak) == str:
+            raise TypeError("Znak musi być typu str")
         if not type(self.image_contour) == numpy.ndarray:
             raise ValueError("Obraz musi zostać przetworzony przy pomocy funkcji set_edge_detection")
         contour_heigh, contour_width  = self.image_contour.shape[:2]
         #making numpy array on base of image_contour
-        contour_matrix = numpy.zeros([contour_heigh, contour_width], dtype=int)
+        contour_matrix = numpy.zeros([contour_heigh, contour_width], dtype=str)
+        cntr = 0
         for x in range(contour_heigh):
             for y in range(contour_width):
-                    contour_matrix[x, y] = int(self.image_contour[x, y])
+                    if int(self.image_contour[x, y]) > 1:
+                        if cntr < len(znak):
+                            contour_matrix[x, y] = znak[cntr]
+                            cntr += 1
+                        else:
+                            contour_matrix[x, y] = znak[0]
+                            cntr = 1
+                    else:
+                        contour_matrix[x, y] =" "
         return contour_matrix
 
         #

@@ -13,11 +13,12 @@ import numpy
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    obraz = imgprocesor.Procesor('obraz', 'images/obraz.jpg')
-    wymiary = obraz.set_scale(16)
+    obraz = imgprocesor.Procesor('obraz', 'images/obraz5.jpg')
+    obraz.set_scale(9)
+    wymiary = obraz.get_dimensions()
     print("Oryginalny wymiar to %(heigh_original)d, %(width_original)d, skala to %(scale)d "
           "nowy wymiar to %(heigh_scaled)d, %(width_scaled)d"%wymiary)
-    kontur = obraz.set_edge_detection(100, 100)
+    kontur = obraz.set_edge_detection(170, 270)
     cv2.imshow('kontur', kontur)
 
     # waits for user to press any key
@@ -26,6 +27,7 @@ if __name__ == '__main__':
 
     # closing all open windows
     cv2.destroyAllWindows()
-    matryca = obraz.get_contour_matrix()
+    matryca = obraz.get_contour_matrix("Grzesiu")
+    numpy.savetxt("data.txt", matryca, fmt="%1s", delimiter=",")
     print(matryca)
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
